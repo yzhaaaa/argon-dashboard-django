@@ -6,6 +6,8 @@ Copyright (c) 2019 - present AppSeed.us
 import os
 from decouple import config
 from unipath import Path
+import environ
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
@@ -23,6 +25,8 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1',
 
 # Application definition
 
+SITE_ID = 1
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -30,7 +34,40 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.home'  # Enable the inner home (home)
+    'apps.home',  # Enable the inner home (home)
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
+
+# GOOGLE_CLIENT_ID = '319910509261-h1vt2vuqogeld4r4pe6umbps03sqp20r.apps.googleusercontent.com'
+# GOOGLE_SECRET = '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'
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # 'APP': {
+        #     'client_id': env('GOOGLE_CLIENT_ID'),
+        #     'secret': env('GOOGLE_SECRET'),
+        # },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+            'prompt': 'consent',
+        }
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # standard django backend
+    'allauth.account.auth_backends.AuthenticationBackend',  # all auth backend
 ]
 
 MIDDLEWARE = [
@@ -42,11 +79,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
-LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
-LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
+# LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
+# LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
 TEMPLATE_DIR = os.path.join(
     CORE_DIR, "apps/templates")  # ROOT dir for templates
 
@@ -73,14 +111,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'netgains_login',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',  # or the hostname where your MySQL server is running
-        'PORT': '3306',      # or the port on which your MySQL server is listening
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'netgains_login',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': 'localhost',  # or the hostname where your MySQL server is running
+#         'PORT': '3306',      # or the port on which your MySQL server is listening
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -129,3 +174,7 @@ STATICFILES_DIRS = (
 
 #############################################################
 #############################################################
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+SOCIALACCOUNT_LOGIN_ON_GET = True
