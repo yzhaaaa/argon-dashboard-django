@@ -42,9 +42,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 ]
 
-# GOOGLE_CLIENT_ID = '319910509261-h1vt2vuqogeld4r4pe6umbps03sqp20r.apps.googleusercontent.com'
-# GOOGLE_SECRET = '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'
-
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
