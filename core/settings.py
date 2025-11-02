@@ -18,7 +18,8 @@ SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # load production server from .env
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', config('SERVER', default='127.0.0.1')]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 config('SERVER', default='127.0.0.1')]
 
 # Application definition
 
@@ -46,7 +47,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 LOGIN_REDIRECT_URL = "home"  # Route defined in home/urls.py
 LOGOUT_REDIRECT_URL = "home"  # Route defined in home/urls.py
-TEMPLATE_DIR = os.path.join(CORE_DIR, "apps/templates")  # ROOT dir for templates
+TEMPLATE_DIR = os.path.join(
+    CORE_DIR, "apps/templates")  # ROOT dir for templates
 
 TEMPLATES = [
     {
@@ -71,8 +73,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'netgains_login',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',  # or the hostname where your MySQL server is running
+        'PORT': '3306',      # or the port on which your MySQL server is listening
     }
 }
 
