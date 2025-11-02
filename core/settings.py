@@ -6,7 +6,6 @@ Copyright (c) 2019 - present AppSeed.us
 import os
 from decouple import config
 from unipath import Path
-import environ
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -42,15 +41,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
 ]
 
-# env = environ.Env()
-# environ.Env.read_env(os.path.join(BASE_DIR.parent, '.env'))
-
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # 'APP': {
-        #     'client_id': env('GOOGLE_CLIENT_ID'),
-        #     'secret': env('GOOGLE_SECRET'),
-        # },
         'SCOPE': [
             'profile',
             'email',
